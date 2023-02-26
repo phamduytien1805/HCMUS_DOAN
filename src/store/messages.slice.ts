@@ -7,20 +7,21 @@ import {
 } from "@reduxjs/toolkit";
 
 import { Message, MessagesState } from "../utilities/types";
+import { OpenAPI } from "../service/OpenApi";
+import { stat } from "fs";
 
 const initialState: MessagesState = {
   messages: [],
-  loading: false,
+  loading: "idle",
   errorMsg: null,
 };
 
 export const sendMsgToApi = createAsyncThunk(
-  "counter/fetchCount",
-  async (amount: number) => {
-    // const response = await fetchCount(amount);
-    // // The value we return becomes the `fulfilled` action payload
-    // return response.data;
-    return { content: "asdasd", date: "DOB", author: "api" };
+  "messages/sendMsgToApi",
+  async (msg: string) => {
+    const chatGPTService = new OpenAPI();
+    const response = await chatGPTService.getCompletion(msg);
+    return response;
   }
 );
 
@@ -41,14 +42,15 @@ const messagesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(sendMsgToApi.pending, (state) => {
-        state.loading = true;
+        state.loading = "loading";
+        state.errorMsg = "null";
       })
       .addCase(sendMsgToApi.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading = "idle";
         state.messages.push(action.payload);
       })
       .addCase(sendMsgToApi.rejected, (state) => {
-        state.loading = false;
+        state.loading = "failed";
         state.errorMsg = "Oops! Something went wrong!";
       });
   },

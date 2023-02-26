@@ -44,8 +44,8 @@ export const ChatBox: React.FC<Props> = ({ onSendMsg }) => {
   const handleSendMessage = () => {
     // handle sending message logic
     console.log("Message sent:", message);
-    onSendMsg(message);
     setMessage("");
+    onSendMsg(message);
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -55,8 +55,8 @@ export const ChatBox: React.FC<Props> = ({ onSendMsg }) => {
   };
 
   const handleChangeMessage = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("e.target :>> ", event);
-    if (event.target.value === "\n") return;
+    console.log("event.target.value", event.target.value);
+    if (event.target.value[event.target.value.length - 1] === "\n") return;
     setMessage(event.target.value);
   };
 

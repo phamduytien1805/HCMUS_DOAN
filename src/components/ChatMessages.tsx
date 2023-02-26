@@ -6,9 +6,11 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useRef, useEffect, useLayoutEffect } from "react";
 import { makeStyles } from "tss-react/mui";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { Message } from "../utilities/types";
+import logo from "../assets/doge.png";
 
 const useStyles = makeStyles()((theme) => ({
   root: {
@@ -46,72 +48,18 @@ const useStyles = makeStyles()((theme) => ({
     marginBottom: theme.spacing(0.5),
   },
 }));
-export interface Props {}
+export interface Props {
+  messages: Message[];
+}
 
-export const ChatMessages: React.FC<Props> = ({}) => {
+export const ChatMessages: React.FC<Props> = ({ messages }) => {
   const { classes } = useStyles();
-  const messages = [
-    {
-      id: 1,
-      sender: "sss",
-      content: "Hey there!",
-      avatar: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-      id: 2,
-      sender: "vvv",
-      content: "sssre sdsdsd?",
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-      id: 3,
-      sender: "sss",
-      content: "asdasdasdasd",
-      avatar: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-      id: 4,
-      sender: "vvv",
-      content: "asdasdasdut asdasd?",
-      avatar: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-      id: 5,
-      sender: "sss",
-      content: "ssssssdsdsd",
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-      id: 6,
-      sender: "John",
-      content: "I'm good, thanks! How about you?",
-      avatar: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-      id: 7,
-      sender: "Jane",
-      content: "Hi John, how are you?",
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-      id: 8,
-      sender: "John",
-      content: "I'm good, thanks! How about you?",
-      avatar: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-      id: 7,
-      sender: "Jane",
-      content: "Hi John, how are you?",
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-      id: 8,
-      sender: "John",
-      content: "I'm good, thanks! How about you?",
-      avatar: "https://i.pravatar.cc/150?img=1",
-    },
-  ];
+  const scrollRef = useRef<HTMLDivElement>();
+  useLayoutEffect(() => {
+    if (scrollRef?.current) {
+      scrollRef.current.scrollIntoView();
+    }
+  });
 
   return (
     <PerfectScrollbar style={{ maxHeight: "calc(100vh - 170px)" }}>
@@ -120,22 +68,26 @@ export const ChatMessages: React.FC<Props> = ({}) => {
           <Box
             key={message.id}
             className={
-              message.sender === "vvv"
+              message.author === "me"
                 ? classes.otherMessageContainer
                 : classes.messageContainer
             }
+            ref={scrollRef}
           >
             <Box
               className={classes.root}
-              bgcolor={message.sender === "John" ? "#f5f5f5" : "#dcf8c6"}
+              bgcolor={message.author === "GPT" ? "#f5f5f5" : "#dcf8c6"}
             >
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
-                  <Avatar alt={message.sender} src={message.avatar} />
+                  <Avatar
+                    alt={message.author}
+                    src={message.author === "me" ? "" : logo}
+                  />
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <span className={classes.sender}>{message.sender}</span>
+                    <span className={classes.sender}>{message.author}</span>
                   }
                   secondary={message.content}
                 />

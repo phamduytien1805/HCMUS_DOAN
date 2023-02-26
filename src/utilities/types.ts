@@ -3,14 +3,14 @@
 // =======================================================================================
 
 export interface Message {
+  id: string;
   content: string;
-  date: string;
   author: string;
 }
 
 export interface MessagesState {
   messages: Message[];
-  loading: boolean;
+  loading: "idle" | "loading" | "failed";
   errorMsg: string | null;
 }
 
