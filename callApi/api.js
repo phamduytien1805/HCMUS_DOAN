@@ -1,6 +1,6 @@
 import { Configuration, OpenAIApi } from "openai";
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: "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",
 });
 
 const openai = new OpenAIApi(configuration); 
@@ -16,8 +16,8 @@ async function runCompletion (question) {
     const completion = await openai.createCompletion({
     model: "text-davinci-003",
     prompt: question,
-    temperature: 0,
-    max_tokens: 1000,
+    temperature: 0.5,
+    max_tokens: 2048,
     });
     ans = completion.data.choices[0].text;
   } catch(error) {
@@ -32,7 +32,7 @@ async function runCompletion (question) {
 };
 
 var anw;
-var questionInput = "i love you, and you?";
+var questionInput = "how are you?";
 anw = await runCompletion(questionInput);
 console.log(anw);
 
