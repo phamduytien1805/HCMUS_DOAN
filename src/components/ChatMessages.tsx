@@ -4,6 +4,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import React, { useRef, useEffect, useLayoutEffect } from "react";
@@ -50,9 +51,10 @@ const useStyles = makeStyles()((theme) => ({
 }));
 export interface Props {
   messages: Message[];
+  isLoading?: boolean;
 }
 
-export const ChatMessages: React.FC<Props> = ({ messages }) => {
+export const ChatMessages: React.FC<Props> = ({ messages, isLoading }) => {
   const { classes } = useStyles();
   const scrollRef = useRef<HTMLDivElement>();
   useLayoutEffect(() => {
@@ -95,6 +97,23 @@ export const ChatMessages: React.FC<Props> = ({ messages }) => {
             </Box>
           </Box>
         ))}
+        {isLoading && (
+          <Box className={classes.messageContainer} ref={scrollRef}>
+            <Box className={classes.root} bgcolor={"#f5f5f5"}>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Avatar alt={"gpt"} src={logo} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={<span className={classes.sender}>{"GPT"}</span>}
+                  secondary={
+                    <Skeleton variant="rounded" width={"100%"} height={60} />
+                  }
+                />
+              </ListItem>
+            </Box>
+          </Box>
+        )}
       </Box>
     </PerfectScrollbar>
   );

@@ -51,6 +51,7 @@ export const ChatBox: React.FC<Props> = ({ onSendMsg }) => {
   const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" && !isEmpty(message)) {
       onSendMsg(message);
+      setMessage("");
     }
   };
 
